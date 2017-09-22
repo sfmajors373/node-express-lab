@@ -6,22 +6,22 @@ const STATUS_USER_ERROR = 422;
 
 // This array of posts persists in memory across requests. Feel free
 // to change this to a let binding if you need to reassign it.
-const posts = [
-  {
-    id: 1,
-    title: 'The post title',
-    contents: 'The post contents'
-  },
-  {
-    id: 2,
-    title: 'Title',
-    contents: 'Contents'
-  },
-  {
-    id: 3,
-    title: 'More title',
-    contents: 'More contents'
-  }
+let posts = [
+  // {
+  //   id: 1,
+  //   title: 'The post title',
+  //   contents: 'The post contents'
+ //  },
+//   {
+//     id: 2,
+//     title: 'Title',
+//     contents: 'Contents'
+//   },
+//   {
+//     id: 3,
+//     title: 'More title',
+//     contents: 'More contents'
+//   }
 ];
 let nextID = 4;
 
@@ -93,9 +93,9 @@ server.put('/posts', (req, res) => {
   if (!id) {
     res.status(STATUS_USER_ERROR);
     res.json({ error: 'id required' });
-  } else if (id < 0 || id >= posts.length) {
-    res.status(STATUS_USER_ERROR);
-    res.json({ error: 'id does not correspond to a post' });
+//   } else if (id < 0 || id >= posts.length) {
+//     res.status(STATUS_USER_ERROR);
+//     res.json({ error: 'id does not correspond to a post' });
   } else if (!title) {
     res.status(STATUS_USER_ERROR);
     res.json({ error: 'Title Required' });
@@ -121,17 +121,24 @@ server.put('/posts', (req, res) => {
 // DELETE /posts
 server.delete('/posts', (req, res) => {
   // const id = req.body.id;
-  const title = req.body.title;
-  const contents = req.body.contents;
   const id = req.body.id;
   if (!id) {
     res.status(STATUS_USER_ERROR);
     res.json({ error: 'id required' });
-  } else if (id < 0 || id >= posts.length) {
-    res.status(STATUS_USER_ERROR);
-    res.json({ error: 'id does not correspond to a post' });
+    return;
+//   } else if (id < 0 || id >= posts.length) {
+//     res.status(STATUS_USER_ERROR);
+//     res.json({ error: 'id does not correspond to a post' });
   }
-  posts.splice(id, 1);
+//   posts.splice(id, 1);
+//   res.json({ success: true });
+  const post = posts.find(p => p.id === id);
+  if (!post) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: `Could not find a post with id ${id}` });
+    return;
+  }
+  posts = posts.filter(p => p.id !== id);
   res.json({ success: true });
 });
 module.exports = { posts, server };
